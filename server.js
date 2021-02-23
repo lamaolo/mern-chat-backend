@@ -1,41 +1,24 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const response = require("./network/response");
+const router = require("./network/routes");
+const db = require("./db");
 
-const router = express.Router();
-const app = express();
 const PORT = 3000;
+const app = express();
+
+// Conectar base de datos
+db();
 
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
-app.use(router);
+app.use(bodyParser.urlencoded({ extended: false }));
 
-router.get("/", (req, res) => {
-  /*res.header({
-    "custom-header": "Mi header personalizado",
-  });
-  console.log(req.headers)*/
-  response.success(req, res, "Lista de mensajes", 200);
-});
-
-router.post("/", (req, res) => {
-  // console.log(req.body);
-  if (req.query.error) {
-    response.error(
-      req,
-      res,
-      "ERROR!!",
-      500,
-      "Es solo una simulación de los errores"
-    );
-  } else {
-    response.success(req, res, "Creado correctamente", 201);
-  }
-});
+// El router que gestiona todas las peticiones HTTP de los distintos componentes
+router(app);
 
 // servir archivos de la carpeta public
 app.use("/app", express.static("public"));
 
 app.listen(PORT, () => {
-  console.log("Server listening on http://localhost:" + PORT);
+  console.log("[SERVER]: Listening on http://localhost:" + PORT);
 });
