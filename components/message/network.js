@@ -1,8 +1,28 @@
 const express = require("express");
+const multer = require("multer");
 const response = require("../../network/response");
 const controller = require("./controller");
+const path = require("path");
 
 const router = express.Router();
+
+// const upload = multer({
+//   // Donde vamos a guardar los archivos que subamos
+//   dest: "public/files/",
+// });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/files/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
 
 /**
  * Este router lo uso como middleware en network/routes.js
@@ -27,18 +47,27 @@ router.get("/", (req, res) => {
 });
 
 // POST A new message
-router.post("/", (req, res) => {
+// Agregamos 'upload' de multer como un middleware, le decimos que vamos a subir
+// un solo archivo (single) y que tiene el nombre 'file' (viene desde el body de la request).
+router.post("/", upload.single("file"), (req, res) => {
   const {
-    body: { user, message },
+    body: { user, message, chat },
+    file,
   } = req;
 
   controller
-    .addMessage(user, message)
+    .addMessage(chat, user, message, file)
     .then((fullMessage) => {
       response.success(req, res, fullMessage, 201);
     })
     .catch((error) => {
-      response.error(req, res, error, 400);
+      response.error(
+        req,
+        res,
+        error,
+        400,
+        error.message ? error.message : error
+      );
     });
 });
 

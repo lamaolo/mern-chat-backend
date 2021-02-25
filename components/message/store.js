@@ -3,20 +3,29 @@ const Model = require("./model");
 async function addMessage(message) {
   const myMessage = new Model(message);
   await myMessage.save();
+  return myMessage;
 }
 
 async function getMessages(filterUser) {
-  let filter = {};
+  return new Promise((resolve, reject) => {
+    let filter = {};
 
-  // Si el endpoint /messages tiene un query "user", va a filtrar los mensajes de ese usuario:
-  // /messages?user=lamaolo => mensajes del usuario 'lamaolo'
+    // Si el endpoint /messages tiene un query "user", va a filtrar los mensajes de ese usuario:
+    // /messages?user=lamaolo => mensajes del usuario 'lamaolo'
 
-  if (filterUser) {
-    filter = { user: filterUser };
-  }
+    if (filterUser) {
+      filter = { user: filterUser };
+    }
 
-  const messages = await Model.find(filter);
-  return messages;
+    Model.find(filter)
+      .populate("user")
+      .exec((error, populatedData) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(populatedData);
+      });
+  });
 }
 
 async function updateMessage(id, message) {

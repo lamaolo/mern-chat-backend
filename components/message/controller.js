@@ -1,25 +1,33 @@
 const store = require("./store");
 const isValidObjectId = require("mongoose").isValidObjectId;
 
-function addMessage(user, message) {
+function addMessage(chat, user, message, file) {
   return new Promise((resolve, reject) => {
-    if (!user || !message) {
+    if (!chat || !user || !message) {
       console.error(
         "[messageController]: El usuario o el mensaje no están definidos"
       );
       reject(`Datos incorrectos`);
     }
 
+    let fileUrl = "";
+    if (file) {
+      // EN /app estoy sirviendo la carpeta public
+      fileUrl = "http://localhost:3000/app/files/" + file.filename;
+    }
+
     const fullMessage = {
+      chat: chat,
       user: user,
       message: message,
       date: new Date(),
+      file: fileUrl,
     };
 
     store
       .add(fullMessage)
-      .then(() => resolve(fullMessage))
-      .catch((error) => reject(error));
+      .then((addedMessage) => resolve(addedMessage))
+      .catch((error) => reject(error.message ? error.message : error));
   });
 }
 
