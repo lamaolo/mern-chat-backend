@@ -6,7 +6,7 @@ const router = require("./network/routes");
 const db = require("./db");
 const { connect } = require("./socket");
 
-const PORT = 8080;
+const PORT = process.env.PORT;
 const app = express();
 const server = require("http").Server(app);
 
@@ -27,5 +27,5 @@ router(app);
 app.use("/app", express.static("public"));
 
 server.listen(PORT, () => {
-  console.log("[SERVER]: Listening on http://localhost:" + PORT);
+  console.log("[SERVER]: Listening on " + process.env.SERVER_URL);
 });

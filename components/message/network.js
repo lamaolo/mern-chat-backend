@@ -22,6 +22,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
+  // Maximo 512 kilobytes, la comprobación la hago en el frontend también
+  limits: { fileSize: 512000 },
 });
 
 // endpoint => /message
