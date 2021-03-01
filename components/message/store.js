@@ -3,7 +3,17 @@ const Model = require("./model");
 async function addMessage(message) {
   const myMessage = new Model(message);
   await myMessage.save();
-  return myMessage;
+
+  return new Promise((resolve, reject) => {
+    Model.find(myMessage._id)
+      .populate("user")
+      .exec((error, populatedData) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(populatedData);
+      });
+  });
 }
 
 async function getMessages(filterUser) {
@@ -18,6 +28,19 @@ async function getMessages(filterUser) {
     }
 
     Model.find(filter)
+      .populate("user")
+      .exec((error, populatedData) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(populatedData);
+      });
+  });
+}
+
+async function filterMessageByChat(chatId) {
+  return new Promise((resolve, reject) => {
+    Model.find({ chat: chatId })
       .populate("user")
       .exec((error, populatedData) => {
         if (error) {
@@ -62,4 +85,5 @@ module.exports = {
   list: getMessages,
   update: updateMessage,
   remove: removeMessage,
+  filterMessageByChat,
 };

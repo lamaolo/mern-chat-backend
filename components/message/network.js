@@ -24,12 +24,6 @@ const upload = multer({
   storage: storage,
 });
 
-/**
- * Este router lo uso como middleware en network/routes.js
- * Automáticamente lo seteo a la ruta /message, asi que cualquier ruta
- * Que defina acá, va a tener como prefijo /message/
- */
-
 // endpoint => /message
 
 // GET All messages || GET User's messages
@@ -46,9 +40,21 @@ router.get("/", (req, res) => {
     );
 });
 
+// GET Messages from a Chat
+router.get("/:chatId", (req, res) => {
+  controller
+    .getChatMessages(req.params.chatId)
+    .then((messages) => {
+      response.success(req, res, messages, 200);
+    })
+    .catch((error) => {
+      response.error(req, res, error, 500);
+    });
+});
+
 // POST A new message
-// Agregamos 'upload' de multer como un middleware, le decimos que vamos a subir
-// un solo archivo (single) y que tiene el nombre 'file' (viene desde el body de la request).
+// 'upload' de multer como un middleware, para subir
+// un solo archivo (single) y que tiene el nombre 'file' (viene desde en request).
 router.post("/", upload.single("file"), (req, res) => {
   const {
     body: { user, message, chat },

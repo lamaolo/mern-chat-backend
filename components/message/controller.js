@@ -1,5 +1,6 @@
 const store = require("./store");
 const isValidObjectId = require("mongoose").isValidObjectId;
+const { socket } = require("../../socket");
 
 function addMessage(chat, user, message, file) {
   return new Promise((resolve, reject) => {
@@ -26,7 +27,10 @@ function addMessage(chat, user, message, file) {
 
     store
       .add(fullMessage)
-      .then((addedMessage) => resolve(addedMessage))
+      .then((addedMessage) => {
+        socket.io.emit("message", addedMessage);
+        resolve(addedMessage);
+      })
       .catch((error) => reject(error.message ? error.message : error));
   });
 }
@@ -35,6 +39,15 @@ function getMessages(filterUser) {
   return new Promise((resolve, reject) => {
     store
       .list(filterUser)
+      .then((messages) => resolve(messages))
+      .catch((error) => reject(error));
+  });
+}
+
+function getChatMessages(chatId) {
+  return new Promise((resolve, reject) => {
+    store
+      .filterMessageByChat(chatId)
       .then((messages) => resolve(messages))
       .catch((error) => reject(error));
   });
@@ -84,4 +97,5 @@ module.exports = {
   getMessages,
   updateMessage,
   deleteMessage,
+  getChatMessages,
 };
