@@ -6,7 +6,7 @@ const router = require("./network/routes");
 const db = require("./db");
 const { connect } = require("./socket");
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const app = express();
 const server = require("http").Server(app);
 
