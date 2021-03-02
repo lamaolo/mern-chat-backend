@@ -1,9 +1,10 @@
 {
-  "name": "BackendNode",
+  "name": "mern-chat-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "API de una aplicación de chat en tiempo real",
   "main": "server.js",
   "scripts": {
+    "build": "node server.js",
     "dev": "nodemon server.js"
   },
   "keywords": [],
