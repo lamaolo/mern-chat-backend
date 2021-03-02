@@ -5,9 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/styles.css" />
-    <title>Estático</title>
+    <title>API</title>
   </head>
   <body>
-    <h1>Hola soy un HTML (un archivo estático)</h1>
+    <h1>Backend de MERN Chat</h1>
+    <h2>Endpoints</h2>
+    <h3>/message</h3>
+    <ul>
+      <li>[GET] /message - Obtiene todos los mensajes</li>
+      <li>[GET] /message/:chatId - Obtiene todos los mensajes de un chat</li>
+      <li>[POST] /message - Crea un nuevo mensaje en un chat</li>
+      <li>[PATCH] /message/:id - Modifica un mensaje existente</li>
+      <li>[DELETE] /message/:id - Elimina un mensaje existente</li>
+    </ul>
+
+    <h3>/user</h3>
+    <ul>
+      <li>[GET] /user - Obtiene todos los usuarios</li>
+      <li>[POST] /user - Crea un nuevo usuario</li>
+    </ul>
+
+    <h3>/chat</h3>
+    <ul>
+      <li>[GET] /chat/:userId - Obtiene todos los mensajes de un usuario</li>
+      <li>[POST] /chat - Crea un nuevo mensaje</li>
+    </ul>
   </body>
 </html>
