@@ -26,6 +26,4 @@ router(app);
 // servir archivos de la carpeta public
 app.use("/app", express.static("public"));
 
-server.listen(PORT, () => {
-  console.log("[SERVER]: Listening on " + process.env.SERVER_URL);
-});
+server.listen(PORT);
