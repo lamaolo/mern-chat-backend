@@ -15,7 +15,7 @@ function addMessage(chat, user, message, file) {
     let fileUrl = "";
     if (file) {
       // EN /app estoy sirviendo la carpeta public
-      fileUrl = path.join(__dirname + "/app/files" + file.filename);
+      fileUrl = path.resolve("/app/files/" + file.filename)
     }
 
     const fullMessage = {

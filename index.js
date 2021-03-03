@@ -24,6 +24,6 @@ connect(server);
 router(app);
 
 // servir archivos de la carpeta public
-// app.use("/app", express.static("public"));
+app.use("/app", express.static("public"));
 
 server.listen(PORT);
