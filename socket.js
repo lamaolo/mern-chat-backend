@@ -4,7 +4,7 @@ const socket = {};
 function connect(server) {
   socket.io = socketIO(server, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: "*",
       methods: ["GET", "POST"],
     },
   });
