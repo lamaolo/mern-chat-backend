@@ -7,6 +7,7 @@ function connect(server) {
       origin: "*",
       methods: ["GET", "POST"],
     },
+    transports: ["websocket"],
   });
 }
 
