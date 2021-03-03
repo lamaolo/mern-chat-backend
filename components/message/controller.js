@@ -1,6 +1,7 @@
 const store = require("./store");
 const isValidObjectId = require("mongoose").isValidObjectId;
 const { socket } = require("../../socket");
+const path = require("path");
 
 function addMessage(chat, user, message, file) {
   return new Promise((resolve, reject) => {
@@ -14,7 +15,7 @@ function addMessage(chat, user, message, file) {
     let fileUrl = "";
     if (file) {
       // EN /app estoy sirviendo la carpeta public
-      fileUrl = `${process.env.SERVER_URL}/app/files/` + file.filename;
+      fileUrl = path.join(__dirname + "/app/files" + file.filename);
     }
 
     const fullMessage = {
